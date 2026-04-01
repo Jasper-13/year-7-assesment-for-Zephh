@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ratio & Proportion Quiz – 20 Questions</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #f0ede8;
+    --text: #1a1a18;
+    --text2: #6b6a65;
+    --text3: #a09f9a;
+    --border: rgba(0,0,0,0.12);
+    --border2: rgba(0,0,0,0.22);
+    --green-bg: #e1f5ee;
+    --green-text: #085041;
+    --green-border: #1D9E75;
+    --red-bg: #faece7;
+    --red-text: #4a1b0c;
+    --red-border: #D85A30;
+    --amber: #EF9F27;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 680px;
+  }
+
+  .brand {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .brand .badge {
+    display: inline-block;
+    background: var(--text);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 99px;
+    margin-bottom: 10px;
+  }
+  .brand h1 {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    color: var(--text);
+  }
+  .brand p {
+    font-size: 15px;
+    color: var(--text2);
+    margin-top: 6px;
+  }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* START */
+  .start-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .info-row {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 12px;
+    margin: 1.5rem 0;
+  }
+  .info-tile {
+    background: var(--surface2);
+    border-radius: var(--radius);
+    padding: 1rem .75rem;
+  }
+  .info-tile .num { font-size: 26px; font-weight: 700; color: var(--text); }
+  .info-tile .lbl { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .topics {
+    text-align: left;
+    background: var(--surface2);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  .topics h3 { font-size: 13px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 8px; }
+  .topic-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .topic-tag {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 99px;
+    font-size: 12px;
+    padding: 3px 10px;
+    color: var(--text2);
+  }
+  .btn-primary {
+    display: block;
+    width: 100%;
+    background: var(--text);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .15s, transform .1s;
+  }
+  .btn-primary:hover { opacity: .85; }
+  .btn-primary:active { transform: scale(.98); }
+
+  /* QUIZ */
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .q-counter { font-size: 14px; color: var(--text2); font-weight: 500; }
+  .timer-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 6px 16px;
+    font-size: 15px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    transition: color .3s, border-color .3s;
+  }
+  .timer-pill.urgent { color: var(--red-border); border-color: var(--red-border); }
+  .timer-icon { font-size: 14px; }
+
+  .prog-bar { height: 5px; background: var(--surface2); border-radius: 3px; margin-bottom: 1.25rem; overflow: hidden; }
+  .prog-fill { height: 100%; background: var(--text); border-radius: 3px; transition: width .35s cubic-bezier(.4,0,.2,1); }
+
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .q-num { font-size: 12px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+  .q-text { font-size: 16px; line-height: 1.65; color: var(--text); font-weight: 500; }
+
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.25rem; }
+  @media (max-width: 480px) { .options-grid { grid-template-columns: 1fr; } }
+
+  .opt-btn {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 13px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+    transition: border-color .15s, background .15s, transform .1s;
+    line-height: 1.4;
+  }
+  .opt-btn:hover:not(:disabled) { border-color: var(--border2); background: var(--surface2); transform: translateY(-1px); }
+  .opt-btn.correct { border-color: var(--green-border); background: var(--green-bg); color: var(--green-text); }
+  .opt-btn.wrong { border-color: var(--red-border); background: var(--red-bg); color: var(--red-text); }
+  .opt-btn:disabled { cursor: default; transform: none; }
+
+  .nav-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .q-dots { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+  .q-dot {
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .q-dot.answered { background: var(--text2); border-color: transparent; }
+  .q-dot.current { background: var(--text); border-color: transparent; box-shadow: 0 0 0 3px rgba(26,26,24,.15); }
+  .q-dot.d-correct { background: var(--green-border); border-color: transparent; }
+  .q-dot.d-wrong { background: var(--red-border); border-color: transparent; }
+  .btn-next {
+    background: var(--text);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 11px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity .15s;
+  }
+  .btn-next:hover { opacity: .85; }
+  .btn-next:disabled { opacity: .3; cursor: default; }
+
+  /* RESULT */
+  #result-screen { text-align: center; }
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .ring-wrap { position: relative; width: 160px; height: 160px; margin: 0 auto 1.25rem; }
+  .ring-wrap svg { width: 160px; height: 160px; }
+  .ring-center {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+  }
+  .ring-pct { font-size: 32px; font-weight: 700; color: var(--text); }
+  .ring-sub { font-size: 12px; color: var(--text2); margin-top: 1px; }
+  .result-title { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  .result-sub { font-size: 14px; color: var(--text2); margin-bottom: 1.5rem; line-height: 1.5; }
+  .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.5rem; }
+  .stat-tile { background: var(--surface2); border-radius: var(--radius); padding: .875rem .75rem; }
+  .stat-num { font-size: 22px; font-weight: 700; }
+  .stat-lbl { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .s-correct { color: var(--green-border); }
+  .s-wrong { color: var(--red-border); }
+  .s-time { color: var(--text); }
+  .btn-row { display: flex; gap: 10px; }
+  .btn-outline {
+    flex: 1;
+    background: transparent;
+    color: var(--text);
+    border: 1.5px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .btn-outline:hover { background: var(--surface2); }
+  .btn-solid {
+    flex: 1;
+    background: var(--text);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .15s;
+  }
+  .btn-solid:hover { opacity: .85; }
+
+  /* REVIEW */
+  #review-screen h2 { font-size: 20px; font-weight: 700; margin-bottom: 1rem; }
+  .review-item {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+    margin-bottom: 10px;
+  }
+  .review-item.ri-c { border-color: var(--green-border); }
+  .review-item.ri-w { border-color: var(--red-border); }
+  .ri-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .ri-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+  .b-c { background: var(--green-bg); color: var(--green-text); }
+  .b-w { background: var(--red-bg); color: var(--red-text); }
+  .ri-qn { font-size: 12px; color: var(--text3); }
+  .ri-q { font-size: 14px; color: var(--text); margin-bottom: 8px; line-height: 1.5; font-weight: 500; }
+  .ri-ans { font-size: 13px; color: var(--text2); }
+  .ri-ans strong { color: var(--text); }
+  .btn-back {
+    display: inline-block;
+    background: transparent;
+    color: var(--text);
+    border: 1.5px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 11px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background .15s;
+  }
+  .btn-back:hover { background: var(--surface2); }
+
+  footer { text-align: center; margin-top: 2rem; font-size: 12px; color: var(--text3); }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="brand">
+    <div class="badge">Mathematics Quiz</div>
+    <h1>Ratio &amp; Proportion</h1>
+    <p>20 reasoning questions · 20-minute timer</p>
+  </div>
+
+  <!-- START -->
+  <div id="start-screen" class="screen active">
+    <div class="start-card">
+      <div class="info-row">
+        <div class="info-tile"><div class="num">20</div><div class="lbl">Questions</div></div>
+        <div class="info-tile"><div class="num">20</div><div class="lbl">Minutes</div></div>
+        <div class="info-tile"><div class="num">4</div><div class="lbl">Options each</div></div>
+      </div>
+      <div class="topics">
+        <h3>Topics covered</h3>
+        <div class="topic-tags">
+          <span class="topic-tag">Simplifying ratios</span>
+          <span class="topic-tag">Sharing in ratio</span>
+          <span class="topic-tag">Direct proportion</span>
+          <span class="topic-tag">Inverse proportion</span>
+          <span class="topic-tag">Map scales</span>
+          <span class="topic-tag">Word problems</span>
+          <span class="topic-tag">Combined ratios</span>
+          <span class="topic-tag">Rate & speed</span>
+        </div>
+      </div>
+      <button class="btn-primary" id="start-btn">Start Quiz →</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz-screen" class="screen">
+    <div class="quiz-header">
+      <span class="q-counter" id="q-counter">Question 1 of 20</span>
+      <div class="timer-pill" id="timer-pill">
+        <span class="timer-icon">⏱</span>
+        <span id="timer-display">20:00</span>
+      </div>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:5%"></div></div>
+    <div class="q-card">
+      <div class="q-num" id="q-num">Question 1</div>
+      <div class="q-text" id="q-text"></div>
+    </div>
+    <div class="options-grid" id="options-grid"></div>
+    <div class="nav-row">
+      <div class="q-dots" id="q-dots"></div>
+      <button class="btn-next" id="next-btn" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result-screen" class="screen">
+    <div class="result-card">
+      <div class="ring-wrap">
+        <svg viewBox="0 0 160 160">
+          <circle cx="80" cy="80" r="66" fill="none" stroke="#e8e6e1" stroke-width="12"/>
+          <circle id="score-arc" cx="80" cy="80" r="66" fill="none" stroke="#1D9E75"
+            stroke-width="12" stroke-linecap="round"
+            stroke-dasharray="414.7" stroke-dashoffset="414.7"
+            transform="rotate(-90 80 80)" style="transition: stroke-dashoffset 1s ease, stroke .5s;"/>
+        </svg>
+        <div class="ring-center">
+          <div class="ring-pct" id="ring-pct">0%</div>
+          <div class="ring-sub">score</div>
+        </div>
+      </div>
+      <div class="result-title" id="result-title">–</div>
+      <div class="result-sub" id="result-sub">–</div>
+      <div class="stats-row">
+        <div class="stat-tile"><div class="stat-num s-correct" id="r-correct">0</div><div class="stat-lbl">Correct</div></div>
+        <div class="stat-tile"><div class="stat-num s-wrong" id="r-wrong">0</div><div class="stat-lbl">Wrong</div></div>
+        <div class="stat-tile"><div class="stat-num s-time" id="r-time">–</div><div class="stat-lbl">Time used</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-outline" id="retry-btn">Try again</button>
+        <button class="btn-solid" id="review-btn">Review answers</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEW -->
+  <div id="review-screen" class="screen">
+    <h2>Answer Review</h2>
+    <div id="review-list"></div>
+    <button class="btn-back" id="back-btn">← Back to results</button>
+  </div>
+
+  <footer>Ratio &amp; Proportion Quiz &nbsp;·&nbsp; 20 Questions &nbsp;·&nbsp; Good luck!</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  { q: "A bag has red and blue marbles in the ratio 3:5. If there are 24 red marbles, how many blue marbles are there?", opts: ["30","40","45","35"], ans: 1 },
+  { q: "Two numbers are in the ratio 7:4. If the larger number is 56, what is the smaller number?", opts: ["28","32","36","24"], ans: 1 },
+  { q: "A recipe uses flour and sugar in the ratio 5:2. If you use 350 g of flour, how much sugar do you need?", opts: ["120 g","140 g","150 g","160 g"], ans: 1 },
+  { q: "A car travels 180 km in 3 hours. At the same speed, how far does it travel in 5 hours?", opts: ["270 km","300 km","320 km","350 km"], ans: 1 },
+  { q: "If 8 workers complete a job in 12 days, how many days will 6 workers take to do the same job (working at the same rate)?", opts: ["14","16","18","20"], ans: 1 },
+  { q: "The ratio of boys to girls in a class is 4:3. If there are 28 boys, how many students are in the class altogether?", opts: ["42","49","45","35"], ans: 1 },
+  { q: "A map has a scale of 1:50,000. A road measures 6 cm on the map. What is the actual length of the road in km?", opts: ["2.5 km","3 km","3.5 km","4 km"], ans: 1 },
+  { q: "Divide ₦840 between Ade and Bola in the ratio 5:3. How much does Ade receive?", opts: ["₦420","₦525","₦315","₦480"], ans: 1 },
+  { q: "If 5 pens cost ₦250, how much do 9 pens cost at the same rate?", opts: ["₦400","₦450","₦500","₦350"], ans: 1 },
+  { q: "A mixture of juice and water is in the ratio 2:7. If the total mixture is 63 litres, how many litres of juice are there?", opts: ["9","12","14","18"], ans: 2 },
+  { q: "Two quantities P and Q are in direct proportion. If P = 12 when Q = 4, what is P when Q = 9?", opts: ["24","27","30","33"], ans: 1 },
+  { q: "The ages of a father and son are in the ratio 8:3. If the father is 48 years old, how old is the son?", opts: ["15","16","18","21"], ans: 2 },
+  { q: "A factory produces 240 items in 6 hours. How many items does it produce in 9 hours at the same rate?", opts: ["320","350","360","380"], ans: 2 },
+  { q: "Three friends share a profit of ₦12,600 in the ratio 2:3:4. What is the largest share?", opts: ["₦4,200","₦3,600","₦5,600","₦4,800"], ans: 2 },
+  { q: "If a:b = 3:4 and b:c = 2:5, what is a:c?", opts: ["3:10","6:20","3:5","6:10"], ans: 0 },
+  { q: "A train covers 450 km in 5 hours. At the same speed, how long does it take to cover 630 km?", opts: ["6 hours","6.5 hours","7 hours","7.5 hours"], ans: 2 },
+  { q: "In a school, the ratio of teachers to students is 1:18. If there are 540 students, how many teachers are there?", opts: ["25","28","30","32"], ans: 2 },
+  { q: "Two numbers are in the ratio 5:9. Their sum is 98. What is the smaller number?", opts: ["32","35","40","45"], ans: 1 },
+  { q: "A tap fills a tank in 8 hours. If another tap fills the same tank in 12 hours, how long do both taps together take to fill it?", opts: ["4 hours","4.8 hours","5 hours","5.5 hours"], ans: 1 },
+  { q: "Gold and silver in an alloy are in the ratio 7:3. If the total mass of the alloy is 250 g, what is the mass of gold?", opts: ["150 g","165 g","175 g","180 g"], ans: 2 },
+];
+
+let current = 0, answers = [], timerInterval, elapsed = 0;
+
+function pad(n) { return String(n).padStart(2,'0'); }
+function fmt(s) { return pad(Math.floor(s/60)) + ':' + pad(s % 60); }
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startTimer() {
+  let remaining = 1200;
+  elapsed = 0;
+  timerInterval = setInterval(() => {
+    remaining--; elapsed++;
+    const d = document.getElementById('timer-display');
+    const p = document.getElementById('timer-pill');
+    d.textContent = fmt(remaining);
+    if (remaining <= 60) p.classList.add('urgent');
+    if (remaining <= 0) { clearInterval(timerInterval); submitQuiz(); }
+  }, 1000);
+}
+
+function renderQ() {
+  const q = QUESTIONS[current];
+  document.getElementById('q-counter').textContent = 'Question ' + (current+1) + ' of 20';
+  document.getElementById('q-num').textContent = 'Question ' + (current+1);
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('prog-fill').style.width = ((current+1)/20*100) + '%';
+  document.getElementById('next-btn').disabled = answers[current] === undefined;
+
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = opt;
+    if (answers[current] !== undefined) {
+      btn.disabled = true;
+      if (i === q.ans) btn.classList.add('correct');
+      else if (i === answers[current]) btn.classList.add('wrong');
+    } else {
+      btn.addEventListener('click', () => { answers[current] = i; renderQ(); });
+    }
+    grid.appendChild(btn);
+  });
+
+  const dots = document.getElementById('q-dots');
+  dots.innerHTML = '';
+  QUESTIONS.forEach((_,i) => {
+    const d = document.createElement('div');
+    d.className = 'q-dot' + (i === current ? ' current' : answers[i] !== undefined ? ' answered' : '');
+    d.title = 'Q' + (i+1);
+    d.addEventListener('click', () => { current = i; renderQ(); });
+    dots.appendChild(d);
+  });
+}
+
+function submitQuiz() {
+  clearInterval(timerInterval);
+  let correct = 0;
+  QUESTIONS.forEach((q,i) => { if (answers[i] === q.ans) correct++; });
+  const pct = Math.round(correct / 20 * 100);
+
+  document.getElementById('ring-pct').textContent = pct + '%';
+  document.getElementById('r-correct').textContent = correct;
+  document.getElementById('r-wrong').textContent = 20 - correct;
+  document.getElementById('r-time').textContent = fmt(elapsed);
+
+  const arc = document.getElementById('score-arc');
+  const circum = 414.7;
+  setTimeout(() => {
+    arc.style.strokeDashoffset = circum - (pct/100)*circum;
+    arc.style.stroke = pct >= 70 ? '#1D9E75' : pct >= 50 ? '#EF9F27' : '#D85A30';
+  }, 100);
+
+  let title, sub;
+  if (pct >= 90) { title = '🎉 Outstanding!'; sub = 'Excellent command of ratio and proportion. Keep it up!'; }
+  else if (pct >= 70) { title = '👍 Well Done!'; sub = 'Strong understanding. Review a few gaps and you\'ll be perfect.'; }
+  else if (pct >= 50) { title = '📚 Good Effort!'; sub = 'You\'re on the right track. Review your wrong answers below.'; }
+  else { title = '💪 Keep Practising!'; sub = 'Go through the review section and revisit the concepts you found difficult.'; }
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-sub').textContent = sub;
+
+  // build review
+  const list = document.getElementById('review-list');
+  list.innerHTML = '';
+  QUESTIONS.forEach((q,i) => {
+    const ok = answers[i] === q.ans;
+    const ua = answers[i] !== undefined ? q.opts[answers[i]] : 'Not answered';
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (ok ? 'ri-c' : 'ri-w');
+    div.innerHTML = `
+      <div class="ri-head">
+        <span class="ri-badge ${ok ? 'b-c' : 'b-w'}">${ok ? '✓ Correct' : '✗ Wrong'}</span>
+        <span class="ri-qn">Q${i+1}</span>
+      </div>
+      <div class="ri-q">${q.q}</div>
+      <div class="ri-ans">Your answer: <strong>${ua}</strong> &nbsp;|&nbsp; Correct answer: <strong>${q.opts[q.ans]}</strong></div>
+    `;
+    list.appendChild(div);
+  });
+
+  show('result-screen');
+}
+
+function reset() {
+  current = 0; answers = []; elapsed = 0;
+  document.getElementById('timer-display').textContent = '20:00';
+  document.getElementById('timer-pill').classList.remove('urgent');
+  document.getElementById('score-arc').style.strokeDashoffset = '414.7';
+}
+
+document.getElementById('start-btn').addEventListener('click', () => { reset(); show('quiz-screen'); renderQ(); startTimer(); });
+document.getElementById('next-btn').addEventListener('click', () => { if (current < 19) { current++; renderQ(); } else { submitQuiz(); } });
+document.getElementById('retry-btn').addEventListener('click', () => { reset(); show('quiz-screen'); renderQ(); startTimer(); });
+document.getElementById('review-btn').addEventListener('click', () => show('review-screen'));
+document.getElementById('back-btn').addEventListener('click', () => show('result-screen'));
+</script>
+</body>
+</html>
